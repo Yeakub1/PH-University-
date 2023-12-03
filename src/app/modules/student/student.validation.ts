@@ -1,46 +1,47 @@
-import Joi from "joi";
+import { z } from 'zod';
 
-const userNameSchema = Joi.object({
-  fristName: Joi.string().required().max(20).trim(),
-  middleName: Joi.string(),
-  lastName: Joi.string()
-    .required()
-    .regex(/^[a-zA-Z]+$/),
+const userNameValidationSchema = z.object({
+  fristName: z.string().max(20).trim(),
+  middleName: z.string(),
+  lastName: z.string().regex(/^[a-zA-Z]+$/),
 });
 
-const guardianSchema = Joi.object({
-  fatherName: Joi.string().required(),
-  fatherOccupation: Joi.string().required(),
-  fatherContactNo: Joi.string().required(),
-  motherName: Joi.string().required(),
-  motherOccupation: Joi.string().required(),
-  motherContactNo: Joi.string().required(),
+const guardianValidationSchema = z.object({
+  fatherName: z.string(),
+  fatherOccupation: z.string(),
+  fatherContactNo: z.string(),
+  motherName: z.string(),
+  motherOccupation: z.string(),
+  motherContactNo: z.string(),
 });
 
-const localGuardianSchema = Joi.object({
-  name: Joi.string().required(),
-  occupation: Joi.string().required(),
-  constactNo: Joi.string().required(),
-  address: Joi.string().required(),
+const localGuardianValidationSchema = z.object({
+  name: z.string(),
+  occupation: z.string(),
+  constactNo: z.string(),
+  address: z.string(),
 });
 
-const studentValidationSchema = Joi.object({
-  id: Joi.string().required(),
-  password: Joi.string().required(),
-  name: userNameSchema.required(),
-  gender: Joi.string().valid('male', 'female').required(),
-  dateOfBirth: Joi.string(),
-  email: Joi.string().email().required(),
-  constactNumber: Joi.string().required(),
-  emergencyContact: Joi.string().required(),
-  bladGroup: Joi.string().valid('A+', 'A-', 'B+', 'B-', 'O+', 'O-').required(),
-  presentAddress: Joi.string().required(),
-  permanentAddress: Joi.string().required(),
-  guardian: guardianSchema.required(),
-  localGuardian: localGuardianSchema,
-  profileImage: Joi.string(),
-  isActive: Joi.string().valid('Active', 'blocked').default('Active'),
-  isDeleted: Joi.boolean()
+export const createStudentValidationSchema = z.object({
+  body: z.object({
+    password: z.string(),
+    student: z.object({
+      name: userNameValidationSchema,
+      gender: z.enum(['male', 'female', 'other']),
+      dateOfBirth: z.string(),
+      email: z.string().email(),
+      constactNumber: z.string(),
+      emergencyContact: z.string(),
+      bladGroup: z.enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']),
+      presentAddress: z.string(),
+      permanentAddress: z.string(),
+      guardian: guardianValidationSchema,
+      localGuardian: localGuardianValidationSchema,
+      profileImage: z.string(),
+    }),
+  }),
 });
 
-export default studentValidationSchema;
+export const studentValidation = {
+  createStudentValidationSchema,
+};
