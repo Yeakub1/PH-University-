@@ -1,42 +1,69 @@
-import { Request, Response } from "express";
-import { studentServices } from "./student.services";
+import { NextFunction, Request, Response } from 'express';
+import { studentServices } from './student.services';
+import sendResponse from '../../utils/sendResponse';
+import httpStatus from 'http-status';
 
-
-const createStudent = async(req: Request, res: Response) => {
+const getSingleStudent = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
-    // const { student: studentData } = req.body;
-    // console.log(req.body);
-    
-    const student = req.body.student;
-    console.log(student);
-    
-      const result = await studentServices.createStudentIntoDB(student);
-      res.status(200).json({
-        success: true,
-        message: 'student is created successfuly',
-        data: result,
-      });
+    const { studentId } = req.params;
+    const result = await studentServices.getSingleStudentFromDB(studentId);
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Single User fetch Successfully',
+      data: result,
+    });
   } catch (error) {
-    console.log(error);
-    
+    next(error);
   }
+};
 
-}
-
-const getAllStudntData = async (req: Request, res: Response) => {
+const getAllStudntData = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const result = await studentServices.getAllStudentDB();
-    res.status(200).json({
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
       success: true,
       message: 'student is created successfuly',
       data: result,
     });
   } catch (error) {
-    console.log(error);
+    next(error);
+  }
+};
+
+const deleteStudent = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { studentId } = req.params;
+    const result = await studentServices.deleteStudentFromDB(studentId);
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Single deleted Successfully',
+      data: result,
+    });
+  } catch (error) {
+    next(error);
   }
 };
 
 export const studentController = {
-  createStudent,
-  getAllStudntData
-}
+  getAllStudntData,
+  getSingleStudent,
+  deleteStudent,
+};

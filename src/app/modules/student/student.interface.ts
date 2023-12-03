@@ -1,4 +1,6 @@
-export type Guardian = {
+import { Model, Types } from 'mongoose';
+// import { StudentModel } from './../student.modle';
+export type TGuardian = {
   fatherName: string;
   fatherOccupation: string;
   fatherContactNo: string;
@@ -7,22 +9,24 @@ export type Guardian = {
   motherContactNo: string;
 };
 
-export type UserName = {
+export type TUserName = {
   fristName: string;
   middleName: string;
   lastName: string;
 };
 
-export type localGuardian = {
+export type TlocalGuardian = {
   name: string;
   occupation: string;
   constactNo: string;
   address: string;
 };
 
-export type Student = {
+export type TStudent = {
   id: string;
-  name: UserName;
+  user: Types.ObjectId;
+  password: string;
+  name: TUserName;
   gender: 'male' | 'female';
   dateOfBirth?: string;
   email: string;
@@ -31,8 +35,30 @@ export type Student = {
   bladGroup?: 'A+' | 'A-' | 'B+' | 'B-' | 'O+' | 'O-';
   presentAddress: string;
   permanentAddress: string;
-  guardian: Guardian;
-  localGuardian: localGuardian;
+  guardian: TGuardian;
+  localGuardian: TlocalGuardian;
   profileImage?: string;
-  isActive: 'Active' | 'blocked';
+  isDeleted: boolean;
 };
+
+
+// for carating static
+export interface studentModle extends Model<TStudent> {
+  // eslint-disable-next-line no-unused-vars
+  isUserExits(id: string): Promise<TStudent | null>
+}
+
+
+
+// for creating instance
+
+// export type StudentMethods = {
+//   isUserExits(id: string): Promise<TStudent | null>;
+// };
+
+// export type StudentModel = Model<
+//   TStudent,
+//   Record<string, never>,
+//   StudentMethods
+// >;
+
