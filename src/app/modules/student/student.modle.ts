@@ -1,7 +1,6 @@
 import { Schema, model } from 'mongoose';
 import validator from 'validator';
 
-
 import {
   TStudent,
   TUserName,
@@ -10,7 +9,6 @@ import {
   studentModle,
 } from './student.interface';
 import isEmail from 'validator/lib/isEmail';
-
 
 const userNameSchema = new Schema<TUserName>({
   fristName: {
@@ -60,7 +58,7 @@ const studentSchema = new Schema<TStudent, studentModle>({
     enum: ['male', 'female'],
     required: true,
   },
-  dateOfBirth: { type: String },
+  dateOfBirth: { type: Date },
   email: {
     type: String,
     required: true,
@@ -91,8 +89,6 @@ const studentSchema = new Schema<TStudent, studentModle>({
   },
 });
 
-
-
 // Query Middleware
 studentSchema.pre('find', function (next) {
   this.find({ isDeleted: { $ne: true } });
@@ -110,6 +106,5 @@ studentSchema.statics.isUserExits = async function (id: string) {
   const existingUser = await Student.findOne({ id });
   return existingUser;
 };
-
 
 export const Student = model<TStudent, studentModle>('Student', studentSchema);
