@@ -83,10 +83,8 @@ const studentSchema = new Schema<TStudent, studentModle>({
   guardian: { type: guardianSchema, required: true },
   localGuardian: localGuardian,
   profileImage: { type: String },
-  isDeleted: {
-    type: Boolean,
-    default: false,
-  },
+  admissionSemester: { type: Schema.Types.ObjectId, ref: 'AcadmicSemester' },
+  isDeleted: { type: Boolean, default: false },
 });
 
 // Query Middleware
