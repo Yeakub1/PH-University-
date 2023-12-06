@@ -10,22 +10,19 @@ router.post(
   validateRequest(
     acadmicSemesterValidations.createAcadmicSemesterValidationSchema,
   ),
-  AcadmicSemesterControllers.createAcadmicSemester,
+  AcadmicSemesterControllers.createAcadmicSemester
 );
 
 router.get('/', AcadmicSemesterControllers.getAllAcademicSemesters);
 
-router.get(
-  '/:semesterId',
-  AcadmicSemesterControllers.getSingleAcademicSemester,
-);
+router.get('/:semesterId', AcadmicSemesterControllers.getSingleAcademicSemester);
 
 router.patch(
   '/:semesterId',
   validateRequest(
-    acadmicSemesterValidations.updateAcademicSemesterValidationSchema,
+    acadmicSemesterValidations.updateAcademicSemesterValidationSchema
   ),
-  AcadmicSemesterControllers.updateAcademicSemester,
+  AcadmicSemesterControllers.updateAcademicSemester
 );
 
 export const AcadmicSemesterRoute = router;

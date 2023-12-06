@@ -85,6 +85,7 @@ const studentSchema = new Schema<TStudent, studentModle>({
   profileImage: { type: String },
   admissionSemester: { type: Schema.Types.ObjectId, ref: 'AcadmicSemester' },
   isDeleted: { type: Boolean, default: false },
+  acadmicDepartment: {type: Schema.Types.ObjectId, ref: 'AcadmicDepartment'}
 });
 
 // Query Middleware

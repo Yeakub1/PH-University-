@@ -1,13 +1,27 @@
 import { Student } from './student.modle';
 
-
 const getAllStudentDB = async () => {
-  const result = await Student.find();
+  const result = await Student.find()
+    .populate('acadmicDepartment')
+    .populate({
+      path: 'acadmicDepartment',
+      populate: {
+        path: 'acadmicFaculty',
+      },
+    });
+
   return result;
 };
 
 const getSingleStudentFromDB = async (id: string) => {
-  const result = await Student.findOne({ id });
+  const result = await Student.findOne({ id })
+    .populate('admissionSemester')
+    .populate({
+      path: 'acadmicDepartment',
+      populate: {
+        path: 'acadmicFaculty',
+      },
+    });
   return result;
 };
 
