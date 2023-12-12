@@ -1,5 +1,5 @@
 import { Model, Types } from 'mongoose';
-// import { StudentModel } from './../student.modle';
+
 export type TGuardian = {
   fatherName: string;
   fatherOccupation: string;
