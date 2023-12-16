@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AcadmicSemester } from './../acadmicSemester/acadmicSemester.model';
 import config from '../../config';
 import { TStudent } from '../student/student.interface';
@@ -48,10 +49,10 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
     await session.commitTransaction();
     await session.endSession();
     return newStudent;
-  } catch (error) {
+  } catch (err: any) {
     await session.abortTransaction();
     await session.endSession();
-    throw new AppError(httpStatus.BAD_REQUEST,"Faild to Create User")
+      throw new AppError(httpStatus.BAD_REQUEST, 'Failde to create User');
   }
 };
 
