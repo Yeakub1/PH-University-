@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Error } from 'mongoose';
 import { AcadmicSemester } from './../acadmicSemester/acadmicSemester.model';
 import config from '../../config';
 import { TStudent } from '../student/student.interface';
@@ -52,7 +53,7 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
   } catch (err: any) {
     await session.abortTransaction();
     await session.endSession();
-      throw new AppError(httpStatus.BAD_REQUEST, 'Failde to create User');
+    throw new Error(err)
   }
 };
 

@@ -16,7 +16,7 @@ const getSingleStudent = catchAsync(async (req, res) => {
 });
 
 const getAllStudntData = catchAsync(async (req, res) => {
-  const result = await studentServices.getAllStudentDB();
+  const result = await studentServices.getAllStudentDB(req.query);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

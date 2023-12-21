@@ -5,8 +5,27 @@ import AppError from '../../errors/appErrors';
 import { User } from '../User/user.modle';
 import { TStudent } from './student.interface';
 
-const getAllStudentDB = async () => {
-  const result = await Student.find()
+const getAllStudentDB = async (query: Record<string, unknown>) => {
+  const queryObj = { ...query };
+  const studentSearchAbleField = ['email', 'name.fristName'];
+
+  let searchTerm = '';
+  if (query?.searchTerm) {
+    searchTerm = query.searchTerm as string;
+  };
+
+  const searchQueary = Student.find({
+    $or: studentSearchAbleField.map((field) => ({
+      [field]: { $regex: searchTerm, $options: 'i' },
+    })),
+  });
+
+  // ? Filtering
+  const excluedField = ['searchTerm', 'sort', 'limit'];
+  excluedField.forEach((el) => delete queryObj[el]);
+  
+
+  const filterQuery =  searchQueary.find(queryObj)
     .populate('acadmicDepartment')
     .populate({
       path: 'acadmicDepartment',
@@ -15,7 +34,23 @@ const getAllStudentDB = async () => {
       },
     });
 
-  return result;
+  let sort = '-createAt';
+
+  if (query.sort) {
+    sort = query.sort as string
+  };
+
+  const sortQuery = filterQuery.sort(sort);
+
+  let limit = 1;
+
+  if (query.limit) {
+    limit = query.limit as number
+  };
+
+  const limitQuery = await sortQuery.limit(limit)
+  
+  return limitQuery;
 };
 
 const getSingleStudentFromDB = async (id: string) => {
@@ -41,19 +76,19 @@ const updatedStudentFromDB = async (id: string, payload: Partial<TStudent>) => {
     for (const [key, value] of Object.entries(name)) {
       modifiedUpdateData[`name.${key}`] = value;
     }
-  };
+  }
 
   if (guardian && Object.keys(guardian).length) {
     for (const [key, value] of Object.entries(guardian)) {
       modifiedUpdateData[`guardian.${key}`] = value;
     }
-  };
+  }
 
   if (localGuardian && Object.keys(localGuardian).length) {
     for (const [key, value] of Object.entries(localGuardian)) {
       modifiedUpdateData[`localGuardian.${key}`] = value;
     }
-  };
+  }
 
   const result = await Student.findOneAndUpdate({ id }, modifiedUpdateData, {
     new: true,
