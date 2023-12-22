@@ -88,6 +88,11 @@ const studentSchema = new Schema<TStudent, studentModle>({
   acadmicDepartment: {type: Schema.Types.ObjectId, ref: 'AcadmicDepartment'}
 });
 
+// virtual
+studentSchema.virtual('fullName').get(function () {
+  return this?.name?.fristName + this?.name?.middleName + this?.name?.lastName;
+});
+
 // Query Middleware
 studentSchema.pre('find', function (next) {
   this.find({ isDeleted: { $ne: true } });
