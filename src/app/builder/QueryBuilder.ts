@@ -57,6 +57,6 @@ class QueryBuilder<T> {
     this.modelQurey = this.modelQurey.select(fields);
     return this;
   }
-};
+}
 
 export default QueryBuilder;
