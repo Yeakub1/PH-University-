@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { SemesterRegistrationStatus } from "./SemesterRegistion.constant";
+import { z } from 'zod';
+import { SemesterRegistrationStatus } from './SemesterRegistion.constant';
 
 const createSemesterRegistionValidationSchema = z.object({
   body: z.object({
@@ -9,7 +9,7 @@ const createSemesterRegistionValidationSchema = z.object({
     endDate: z.string().datetime(),
     minCredit: z.number(),
     maxCredit: z.number(),
-  })
+  }),
 });
 
 const upadateSemesterRegistionValidationSchema = z.object({
@@ -26,6 +26,6 @@ const upadateSemesterRegistionValidationSchema = z.object({
 });
 
 export const SemesterRegistionValidation = {
-    createSemesterRegistionValidationSchema,
-    upadateSemesterRegistionValidationSchema
-}
+  createSemesterRegistionValidationSchema,
+  upadateSemesterRegistionValidationSchema,
+};
